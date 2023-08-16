@@ -8,7 +8,6 @@ interface IDashboardProps {}
 
 const Dashboard: FC<IDashboardProps> = async ({}) => {
   const session = await getServerSession(authOptions)
-  console.log(session)
 
   return (
     <>
