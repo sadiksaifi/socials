@@ -1,14 +1,16 @@
+"use client"
+
 import { FC } from "react"
 import Button from "@/component/ui/Button"
-import Link from "next/link"
+import { signOut } from "next-auth/react"
 
 interface IHomeProps {}
 
-const Home: FC<IHomeProps> = async ({}) => {
+const Home: FC<IHomeProps> = ({}) => {
   return (
     <div>
-      <Button type='button'>
-        <Link href='/login'>Login</Link>
+      <Button type='button' onClick={() => signOut()}>
+        Sign out
       </Button>
     </div>
   )
