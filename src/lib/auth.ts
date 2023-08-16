@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth"
 import { UpstashRedisAdapter } from "@next-auth/upstash-redis-adapter"
 import { db } from "./db"
 import GoogleProvider from "next-auth/providers/google"
+import { User } from "@/types/db"
 
 const getGoogleCredentials = () => {
   const clientId = process.env.GOOGLE_CLIENT_ID
@@ -30,22 +31,27 @@ export const authOptions: NextAuthOptions = {
       clientSecret: getGoogleCredentials().clientSecret,
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
-      const dbUser = (await db.get(`user:${user.id}`)) as User | null
+      console.log("User object:", user)
 
-      if (!dbUser) {
-        token.id = user!.id
-        return token
-      }
+      if (user) {
+        const dbUser = (await db.get(`user:${user.id}`)) as User | null
+        console.log("DB User object:", dbUser)
 
-      return {
-        id: dbUser.id,
-        name: dbUser.name,
-        email: dbUser.email,
-        picture: dbUser.image,
+        if (!dbUser) {
+          token.id = user.id
+          return token
+        }
+
+        return {
+          id: dbUser.id,
+          name: dbUser.name,
+          email: dbUser.email,
+          picture: dbUser.image,
+        }
       }
+      return token
     },
     async session({ session, token }) {
       if (token) {
@@ -57,7 +63,7 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     redirect() {
-      return '/dashboard'
-    }
+      return "/dashboard"
+    },
   },
 }
