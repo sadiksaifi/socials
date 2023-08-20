@@ -5,7 +5,10 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { Icon, Icons } from "@/component/Icons"
 import Image from "next/image"
-import SignoutButton from '@/component/SignoutButton'
+import SignoutButton from "@/component/SignoutButton"
+import FriendRequestsSidebarOption from "@/component/FriendRequestsSidebarOption"
+import { fetchRedis } from "@/helper/redis"
+import { User } from "@/types/db"
 
 interface ILayoutProps {
   children: ReactNode
@@ -31,6 +34,13 @@ const Layout: FC<ILayoutProps> = async ({ children }) => {
   const session = await getServerSession(authOptions)
 
   if (!session) notFound()
+
+  const unseenRequestCount = (
+    (await fetchRedis(
+      "smembers",
+      `user:${session.user.id}:incoming_friend_requests`
+    )) as User[]
+  ).length
 
   return (
     <div className='w-full flex h-screen '>
@@ -69,6 +79,14 @@ const Layout: FC<ILayoutProps> = async ({ children }) => {
                 })}
               </ul>
             </li>
+
+            <li>
+              <FriendRequestsSidebarOption
+                sessionId={session.user.id}
+                initialUnseenRequestCount={unseenRequestCount}
+              />
+            </li>
+
             <li className='-mx-6 mt-auto flex items-center'>
               <div className='flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900'>
                 <div className='relative h-8 w-8 bg-gray-50'>
@@ -88,7 +106,7 @@ const Layout: FC<ILayoutProps> = async ({ children }) => {
                   </span>
                 </div>
               </div>
-              <SignoutButton className='h-full aspect-square'/>
+              <SignoutButton className='h-full aspect-square' />
             </li>
           </ul>
         </nav>

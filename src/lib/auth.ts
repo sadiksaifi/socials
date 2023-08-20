@@ -1,18 +1,19 @@
-import { NextAuthOptions } from "next-auth"
-import { UpstashRedisAdapter } from "@next-auth/upstash-redis-adapter"
-import { db } from "./db"
-import GoogleProvider from "next-auth/providers/google"
-import { User } from "@/types/db"
+import { NextAuthOptions } from 'next-auth'
+import { UpstashRedisAdapter } from '@next-auth/upstash-redis-adapter'
+import { db } from './db'
+import GoogleProvider from 'next-auth/providers/google'
+import { User } from '@/types/db'
+import { fetchRedis } from '@/helper/redis'
 
 const getGoogleCredentials = () => {
   const clientId = process.env.GOOGLE_CLIENT_ID
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET
 
   if (!clientId || clientId.length === 0) {
-    throw new Error("Missing GOOGLE_CLIENT_ID")
+    throw new Error('Missing GOOGLE_CLIENT_ID')
   }
   if (!clientSecret || clientSecret.length === 0) {
-    throw new Error("Missing GOOGLE_CLIENT_SECRET")
+    throw new Error('Missing GOOGLE_CLIENT_SECRET')
   }
   return { clientId, clientSecret }
 }
@@ -20,10 +21,10 @@ const getGoogleCredentials = () => {
 export const authOptions: NextAuthOptions = {
   adapter: UpstashRedisAdapter(db),
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   pages: {
-    signIn: "/login",
+    signIn: '/login',
   },
   providers: [
     GoogleProvider({
@@ -33,14 +34,17 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-
       if (user) {
-        const dbUser = (await db.get(`user:${user.id}`)) as User | null
+        const dbUserResult = (await fetchRedis('get', `user:${user.id}`)) as
+          | string
+          | null
 
-        if (!dbUser) {
+        if (!dbUserResult) {
           token.id = user.id
           return token
         }
+
+        const dbUser: User = JSON.parse(dbUserResult)
 
         return {
           id: dbUser.id,
@@ -61,7 +65,7 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     redirect() {
-      return "/dashboard"
+      return '/dashboard'
     },
   },
 }

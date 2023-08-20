@@ -1,21 +1,12 @@
-import Button from "@/component/ui/Button"
-import { authOptions } from "@/lib/auth"
-import { getServerSession } from "next-auth/next"
-import Link from "next/link"
-import { FC } from "react"
+import { FC } from 'react'
 
 interface IDashboardProps {}
 
 const Dashboard: FC<IDashboardProps> = async ({}) => {
-  const session = await getServerSession(authOptions)
-
   return (
-    <>
-      <pre>{JSON.stringify(session)}</pre>
-      <Button>
-        <Link href='/'>Home</Link>
-      </Button>
-    </>
+    <main className='pt-8'>
+      <h1 className='font-bold text-5xl mb-8'>Dashboard</h1>
+    </main>
   )
 }
 
