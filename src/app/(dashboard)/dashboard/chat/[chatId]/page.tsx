@@ -44,20 +44,13 @@ const Chat: FC<IChatProps> = async ({ params }) => {
 
   const [userId1, userId2] = chatId.split("--")
 
-  if (user.id === userId1 || user.id === userId2) {
-    return notFound()
-  }
+  if (user.id !== userId1 && user.id !== userId2) notFound()
 
   const chatPartnerId = user.id === userId1 ? userId2 : userId1
   const chatPartner = (await db.get(`user:${chatPartnerId}`)) as User
   const initialMessages = await getChatMessages(chatId)
 
-  return (
-    <div>
-      {chatId}
-      {user.name}
-    </div>
-  )
+  return <div>{chatId}</div>
 }
 
 export default Chat
