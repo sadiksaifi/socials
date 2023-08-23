@@ -38,6 +38,7 @@ async function getChatMessages(chatId: string) {
 }
 
 const Chat: FC<ChatProps> = async ({ params }) => {
+  // await new Promise((resolve) => setTimeout(resolve, 5000))
   const { chatId } = params
 
   const session = await getServerSession(authOptions)
