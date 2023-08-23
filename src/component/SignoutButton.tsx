@@ -8,7 +8,7 @@ import { Loader2, LogOut } from "lucide-react"
 
 interface ISignoutButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
-const SignoutButton: FC<ISignoutButtonProps> = ({ ...props }) => {
+const SignOutButton: FC<ISignoutButtonProps> = ({ ...props }) => {
   const [isSignOut, setSignOut] = useState<boolean>(false)
 
   return (
@@ -35,4 +35,4 @@ const SignoutButton: FC<ISignoutButtonProps> = ({ ...props }) => {
   )
 }
 
-export default SignoutButton
+export default SignOutButton

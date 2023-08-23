@@ -1,14 +1,32 @@
-import { fetchRedis } from "@/helper/redis"
-import { authOptions } from "@/lib/auth"
-import { db } from "@/lib/db"
-import { messageArrayValidator } from "@/lib/validations/message"
-import { User, Message } from "@/types/db"
-import { getServerSession } from "next-auth"
-import { notFound } from "next/navigation"
-import { FC } from "react"
-import Image from "next/image"
-import Messages from '@/component/Messages'
 import ChatInput from '@/component/ChatInput'
+import Messages from '@/component/Messages'
+import { fetchRedis } from '@/helper/redis'
+import { authOptions } from '@/lib/auth'
+import { messageArrayValidator } from '@/lib/validations/message'
+import { Message, User } from '@/types/db'
+import { getServerSession } from 'next-auth'
+import Image from 'next/image'
+import { notFound } from 'next/navigation'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { chatId: string }
+}) {
+  const session = await getServerSession(authOptions)
+  if (!session) notFound()
+  const [userId1, userId2] = params.chatId.split('--')
+  const { user } = session
+
+  const chatPartnerId = user.id === userId1 ? userId2 : userId1
+  const chatPartnerRaw = (await fetchRedis(
+    'get',
+    `user:${chatPartnerId}`
+  )) as string
+  const chatPartner = JSON.parse(chatPartnerRaw) as User
+
+  return { title: `FriendZone | ${chatPartner.name} chat` }
+}
 
 interface ChatProps {
   params: {
@@ -19,39 +37,45 @@ interface ChatProps {
 async function getChatMessages(chatId: string) {
   try {
     const results: string[] = await fetchRedis(
-      "zrange",
+      'zrange',
       `chat:${chatId}:messages`,
       0,
       -1
     )
 
-    const dbMessages = await results.map(
-      (message) => JSON.parse(message) as Message
-    )
-    const reversedMessages = dbMessages.reverse()
+    const dbMessages = results.map((message) => JSON.parse(message) as Message)
 
-    const messages = messageArrayValidator.parse(reversedMessages)
+    const reversedDbMessages = dbMessages.reverse()
+
+    const messages = messageArrayValidator.parse(reversedDbMessages)
+
     return messages
   } catch (error) {
     notFound()
   }
 }
 
-const Chat: FC<ChatProps> = async ({ params }) => {
-  // await new Promise((resolve) => setTimeout(resolve, 5000))
+const Chat = async ({ params }: ChatProps) => {
   const { chatId } = params
-
   const session = await getServerSession(authOptions)
   if (!session) notFound()
 
   const { user } = session
 
-  const [userId1, userId2] = chatId.split("--")
+  const [userId1, userId2] = chatId.split('--')
 
-  if (user.id !== userId1 && user.id !== userId2) notFound()
+  if (user.id !== userId1 && user.id !== userId2) {
+    notFound()
+  }
 
   const chatPartnerId = user.id === userId1 ? userId2 : userId1
-  const chatPartner = (await db.get(`user:${chatPartnerId}`)) as User
+  // new
+
+  const chatPartnerRaw = (await fetchRedis(
+    'get',
+    `user:${chatPartnerId}`
+  )) as string
+  const chatPartner = JSON.parse(chatPartnerRaw) as User
   const initialMessages = await getChatMessages(chatId)
 
   return (
@@ -89,7 +113,7 @@ const Chat: FC<ChatProps> = async ({ params }) => {
         sessionId={session.user.id}
         initialMessages={initialMessages}
       />
-      <ChatInput chatId={chatId} chatPartner={chatPartner} /> 
+      <ChatInput chatId={chatId} chatPartner={chatPartner} />
     </div>
   )
 }
