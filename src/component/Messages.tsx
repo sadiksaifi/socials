@@ -1,6 +1,6 @@
 "use client"
 
-import { Message } from "@/lib/validations/message"
+import { Message } from '@/lib/validations/message'
 import { User } from "@/types/db"
 import { FC, useEffect, useRef, useState } from "react"
 import Image from "next/image"
