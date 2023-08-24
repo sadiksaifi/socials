@@ -116,7 +116,6 @@ const Layout: FC<ILayoutProps> = async ({ children }) => {
             </li>
           </ul>
         </nav>
-        d
       </div>
       <aside className='max-h-screen container py-16 md:py-12 w-full'>
         {children}

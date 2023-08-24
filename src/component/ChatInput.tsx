@@ -5,7 +5,7 @@ import { FC, useRef, useState } from "react"
 import { toast } from "react-hot-toast"
 import TextareaAutosize from "react-textarea-autosize"
 import Button from "./ui/Button"
-import { User } from "@/types/db"
+import { User } from '@/types/db'
 
 interface ChatInputProps {
   chatPartner: User
@@ -63,7 +63,7 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
         <div className='absolute right-0 bottom-0 flex justify-between py-2 pl-3 pr-2'>
           <div className='flex-shrin-0'>
             <Button isLoading={isLoading} onClick={sendMessage} type='submit'>
-              Send
+              Post
             </Button>
           </div>
         </div>
