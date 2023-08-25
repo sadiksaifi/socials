@@ -1,34 +1,125 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Socials - A social media realtime chat app
+This is a social media realtime chat app that allows users to sign in with google, add friends and chat with other users in realtime.
 
-## Getting Started
+## Getting Started with the project
 
-First, run the development server:
+First, put all the environment variables in a `.env.local` file in the root of the project.
+
+The variables are:
+> Note: These variables can be accessed from the respective services.
 
 ```bash
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=
+
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+PUSHER_APP_ID=
+PUSHER_APP_SECRET=
+NEXT_PUBLIC_PUSHER_APP_KEY=
+```
+
+Second, run the development server:
+> Note: You can also use alternative package managers like `yarn` or `pnpm`.
+
+```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Stack used
+- [Next.js](https://nextjs.org/) - For frontend & backend as well.
+- [TypeScript](https://www.typescriptlang.org/) - For robustness 
+- [Axios](https://axios-http.com/) - For making http requests
+- [Pusher](https://pusher.com/) - For realtime chat using websocket
+- [Redis](https://redis.io/) - For storing user's data
+- [NextAuth.js](https://next-auth.js.org/) - For authentication
+- [React Hook Form](https://react-hook-form.com/) - For form validation
+- [Zod](https://zod.dev/) - For schema validation
+- [Lucide Icons](https://lucide.dev/) - For icons
+- [Tailwind CSS](https://tailwindcss.com/) - For styling
+- Also several small libs like: [tailwind-merge](https://github.com/dcastil/tailwind-merge), [clsx](https://github.com/lukeed/clsx#readme), [cva](https://github.com/joe-bell/cva#readme) and etc.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Directory Structure
 
-## Learn More
+```bash
+src
+├── app
+│   ├── api
+│   │   ├── auth
+│   │   │   └── [...nextauth]
+│   │   │       └── route.ts
+│   │   ├── friends
+│   │   │   ├── accept
+│   │   │   │   └── route.ts
+│   │   │   ├── add
+│   │   │   │   └── route.ts
+│   │   │   └── deny
+│   │   │       └── route.ts
+│   │   └── message
+│   │       └── send
+│   │           └── route.ts
+│   ├── (auth)
+│   │   └── login
+│   │       └── page.tsx
+│   ├── dashboard
+│   │   ├── add
+│   │   │   ├── loading.tsx
+│   │   │   └── page.tsx
+│   │   ├── chat
+│   │   │   └── [chatId]
+│   │   │       ├── loading.tsx
+│   │   │       └── page.tsx
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── requests
+│   │       ├── loading.tsx
+│   │       └── page.tsx
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── assets
+│   └── logo.svg
+├── component
+│   ├── AddFriendButton.tsx
+│   ├── ChatInput.tsx
+│   ├── FriendRequestsSidebarOption.tsx
+│   ├── FriendRequests.tsx
+│   ├── Icons.tsx
+│   ├── Messages.tsx
+│   ├── MobileChatLayout.tsx
+│   ├── Provider.tsx
+│   ├── SidebarChatList.tsx
+│   ├── SignoutButton.tsx
+│   ├── SocialsLogo.tsx
+│   ├── ui
+│   │   └── Button.tsx
+│   └── UnseenChatToast.tsx
+├── helper
+│   ├── get-friends-by-user-id.ts
+│   └── redis.ts
+├── lib
+│   ├── auth.ts
+│   ├── db.ts
+│   ├── pusher.ts
+│   ├── utils.ts
+│   └── validations
+│       ├── add-friend.ts
+│       └── message.ts
+├── middleware.ts
+└── types
+    ├── db.d.ts
+    ├── next-auth.d.ts
+    ├── pusher.d.ts
+    └── typings.d.ts
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## License
+This is licensed under GPL-3.0 license. See [LICENSE](https://choosealicense.com/licenses/gpl-3.0/). You are free to use this project for personal or commercial use. You can also modify this project as you wish.
