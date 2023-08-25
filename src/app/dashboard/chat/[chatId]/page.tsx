@@ -8,7 +8,6 @@ import { getServerSession } from "next-auth"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 
-// The following generateMetadata functiion was written after the video and is purely optional
 export async function generateMetadata({
   params,
 }: {
@@ -26,7 +25,7 @@ export async function generateMetadata({
   )) as string
   const chatPartner = JSON.parse(chatPartnerRaw) as User
 
-  return { title: `FriendZone | ${chatPartner.name} chat` }
+  return { title: `Socials | ${chatPartner.name} chat` }
 }
 
 interface PageProps {

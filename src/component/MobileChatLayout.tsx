@@ -14,6 +14,7 @@ import { Session } from 'next-auth'
 import { SidebarOption } from '@/types/typings'
 import { usePathname } from 'next/navigation'
 import { User } from '@/types/db'
+import SocialsLogo from './SocialsLogo'
 
 interface MobileChatLayoutProps {
   friends: User[]
@@ -37,7 +38,7 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({ friends, session, sidebar
         <Link
           href='/dashboard'
           className={buttonVariants({ variant: 'ghost' })}>
-          <Icons.Logo className='h-6 w-auto text-indigo-600' />
+          <SocialsLogo />
         </Link>
         <Button onClick={() => setOpen(true)} className='gap-4'>
           Menu <Menu className='h-6 w-6' />
@@ -130,7 +131,7 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({ friends, session, sidebar
                               </ul>
                             </li>
 
-                            <li className='-ml-6 mt-auto flex items-center'>
+                            <li className='-ml-6 mt-auto flex items-center bottom-0 absolute -mb-5 w-full'>
                               <div className='flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900'>
                                 <div className='relative h-8 w-8 bg-gray-50'>
                                   <Image

@@ -1,9 +1,10 @@
 "use client"
 
+import SocialsLogo from "@/component/SocialsLogo"
 import Button from "@/component/ui/Button"
 import { signIn } from "next-auth/react"
 import { FC, useState } from "react"
-import { toast } from 'react-hot-toast'
+import { toast } from "react-hot-toast"
 
 interface ILoginProps {}
 
@@ -16,18 +17,18 @@ const Login: FC<ILoginProps> = ({}) => {
       await signIn("google")
     } catch (error) {
       /* display error msg to user */
-      toast.error('Something went wrong...')
+      toast.error("Something went wrong...")
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <div className='flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
-      <div className='w-full flex flex-col items-center max-w-md space-y-8'>
+    <div className='flex min-h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
+      <div className='flex flex-col items-center w-[30rem] gap-10 justify-center -mt-20'>
         <div className='flex flex-col items-center gap-8'>
-          Logo
-          <h2 className='mt-6 text-center text-3xl font-bold tracking-tight text-gray-900'>
+          <SocialsLogo size='2xl' />
+          <h2 className='mt-3 text-center text-3xl font-bold tracking-tight text-gray-900'>
             Sign in to your account
           </h2>
         </div>

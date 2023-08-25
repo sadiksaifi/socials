@@ -12,7 +12,8 @@ import { User } from "@/types/db"
 import { getFriendsByUserId } from "@/helper/get-friends-by-user-id"
 import SidebarChatList from "@/component/SidebarChatList"
 import MobileChatLayout from "@/component/MobileChatLayout"
-import { SidebarOption } from '@/types/typings'
+import { SidebarOption } from "@/types/typings"
+import SocialsLogo from '@/component/SocialsLogo'
 
 interface ILayoutProps {
   children: ReactNode
@@ -51,8 +52,8 @@ const Layout: FC<ILayoutProps> = async ({ children }) => {
         />
       </div>
       <div className='hidden md:flex h-full w-full max-w-xs grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6'>
-        <Link href='/dashboard' className='flex h-16 shrink-0 items-center'>
-          <Icons.Logo className='h-8 w-auto text-indigo-600' />
+        <Link href='/dashboard' className='flex h-16 shrink-0 items-center my-6'>
+          <SocialsLogo size='lg'/>
         </Link>
         {friends.length ? (
           <div className='text-xs font-semibold leading-6 text-gray-400'>
@@ -117,7 +118,7 @@ const Layout: FC<ILayoutProps> = async ({ children }) => {
           </ul>
         </nav>
       </div>
-      <aside className='max-h-screen container py-16 md:py-12 w-full'>
+      <aside className='max-h-screen container pt-16 md:pt-12 w-full'>
         {children}
       </aside>
     </div>

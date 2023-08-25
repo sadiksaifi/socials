@@ -4,11 +4,9 @@ import { FC } from "react"
 import Button from "@/component/ui/Button"
 import { signOut } from "next-auth/react"
 
-interface IHomeProps {}
-
-const Home: FC<IHomeProps> = ({}) => {
+const Home: FC = () => {
   return (
-    <div>
+    <div className='flex w-full min-h-screen justify-center items-center'>
       <Button type='button' onClick={() => signOut()}>
         Sign out
       </Button>
